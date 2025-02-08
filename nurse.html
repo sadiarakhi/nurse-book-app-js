@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nurse Booking App</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 20px auto; }
+        .card { padding: 10px; border: 1px solid #ccc; margin: 5px; cursor: pointer; }
+        .selected { background-color: #cce5ff; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <h1>Nurse Booking App</h1>
+    <div id="nurses-list"></div>
+    <div id="booking-form" class="hidden">
+        <h2 id="selected-nurse-name"></h2>
+        <input type="date" id="appointment-date">
+        <input type="time" id="appointment-time">
+        <button onclick="bookAppointment()">Book Appointment</button>
+    </div>
+    <p id="confirmation" class="hidden"></p>
+    
+    <script>
+        const nurses = [
+            { id: 1, name: "Sarah Johnson", specialty: "Pediatric Nurse" },
+            { id: 2, name: "Michael Smith", specialty: "ICU Nurse" },
+            { id: 3, name: "Emily Davis", specialty: "Oncology Nurse" }
+        ];
+        
+        const nursesList = document.getElementById("nurses-list");
+        const bookingForm = document.getElementById("booking-form");
+        const selectedNurseName = document.getElementById("selected-nurse-name");
+        const confirmation = document.getElementById("confirmation");
+        let selectedNurse = null;
+
+        nurses.forEach(nurse => {
+            const card = document.createElement("div");
+            card.className = "card";
+            card.innerHTML = `<strong>${nurse.name}</strong> - ${nurse.specialty}`;
+            card.onclick = () => {
+                document.querySelectorAll(".card").forEach(el => el.classList.remove("selected"));
+                card.classList.add("selected");
+                selectedNurse = nurse;
+                selectedNurseName.textContent = `Book an Appointment with ${nurse.name}`;
+                bookingForm.classList.remove("hidden");
+            };
+            nursesList.appendChild(card);
+        });
+
+        function bookAppointment() {
+            const date = document.getElementById("appointment-date").value;
+            const time = document.getElementById("appointment-time").value;
+            if (!selectedNurse || !date || !time) {
+                alert("Please select a nurse and fill out the appointment details.");
+                return;
+            }
+            confirmation.textContent = `Appointment booked with ${selectedNurse.name} on ${date} at ${time}`;
+            confirmation.classList.remove("hidden");
+        }
+    </script>
+</body>
+</html>
